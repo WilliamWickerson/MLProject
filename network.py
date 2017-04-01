@@ -14,7 +14,7 @@ class Network:
         for rowNum in range(len(self.network)):
             if rowNum + 1 < len(self.network):
                 for node in self.network[rowNum]:
-                    node.theta = numpy.array([random() for x in range(len(self.network[rowNum + 1]))])
+                    node.theta = numpy.array([random() / len(self.network[rowNum + 1]) for x in range(len(self.network[rowNum + 1]) + 1)])
             else:
                 for node in self.network[rowNum]:
                     node.theta = numpy.array([random() for x in range(2)])
@@ -32,7 +32,7 @@ class Network:
             for nodeNum in range(len(self.network[rowNum])):
                 #Assert that the number of inputs for that neuron is correct
                 if rowNum + 1 < len(self.network):
-                    assert len(nodeData[dataRowCounter]) == len(self.network[rowNum + 1])
+                    assert len(nodeData[dataRowCounter]) == len(self.network[rowNum + 1]) + 1
                 else:
                     assert len(nodeData[dataRowCounter]) == 2
                 #Give the neuron the input data
@@ -49,34 +49,53 @@ class Network:
         numpy.set_printoptions(threshold = 10, linewidth = 75)
         file.close()
     def networkOutputs(self, inputs):
-        outputs = [numpy.array(inputs)]
+        assert len(inputs) == len(self.network[len(self.network) - 1])
+        outputs = [inputs]
         for rowNum in reversed(range(0, len(self.network))):
-            layorOutputs = [neuron.sigmoid(outputs[0]) for neuron in self.network[rowNum]]
-            outputs = [layorOutputs] + outputs
+            if rowNum + 1 < len(self.network):
+                layorOutputs = [neuron.sigmoid(outputs[0]) for neuron in self.network[rowNum]]
+                outputs = [layorOutputs] + outputs
+            else:
+                layorOutputs = [self.network[rowNum][i].sigmoid([outputs[0][i]]) for i in range(len(outputs[0]))]
+                outputs = [layorOutputs] + outputs
         return outputs
     def classify(self, inputs):
-        outputs = networkOutputs(inputs)
-        maxValue, maxIndex = max(outputs[0])
-        return maxIndex
+        outputs = self.networkOutputs(inputs)
+        maxValue = max(outputs[0])
+        maxIndex = outputs[0].index(maxValue)
+        return maxIndex, maxValue
     def backPropagate(self, inputs, targets):
-        outputs = networkOutput(inputs)
+        outputs = self.networkOutputs(inputs)
         for rowNum in range(0, len(self.network)):
             if rowNum == 0:
                 for neuronNum in range(0, len(self.network[rowNum])):
                     error = targets[neuronNum] - outputs[rowNum][neuronNum]
                     self.network[rowNum][neuronNum].updateDelta(outputs[rowNum + 1], error)
-            else:
-                for neuronNum in range(0, len(network[rowNum])):
+            elif rowNum + 1 < len(self.network):
+                for neuronNum in range(0, len(self.network[rowNum])):
                     error = 0
                     for neuron in self.network[rowNum - 1]:
                         error += neuron.theta[neuronNum + 1] * neuron.delta
                     self.network[rowNum][neuronNum].updateDelta(outputs[rowNum + 1], error)
+            else:
+                for neuronNum in range(0, len(self.network[rowNum])):
+                    error = 0
+                    for neuron in self.network[rowNum - 1]:
+                        error += neuron.theta[neuronNum + 1] * neuron.delta
+                    self.network[rowNum][neuronNum].updateDelta([outputs[rowNum + 1][neuronNum]], error)
         for rowNum in range(0, len(self.network)):
-            for neuron in self.network[rowNum]:
-                neuron.updateWeights(outputs[rowNum + 1])
+            if rowNum + 1 < len(self.network):
+                for neuron in self.network[rowNum]:
+                    neuron.updateWeights(outputs[rowNum + 1])
+            else:
+                for neuronNum in range(0, len(self.network[rowNum])):
+                    self.network[rowNum][neuronNum].updateWeights([outputs[rowNum + 1][neuronNum]])
         
 network = Network([44,100,161])
 network.startFromScratch()
 network.writeToFile("test.txt")
-network.startFromFile("test.txt")
+for i in range(1000):
+    network.backPropagate([1]*161, [0] + [1] + [0]*42)
+print(network.classify([1]*161))
+print(network.networkOutputs([1]*161)[0])
 network.writeToFile("test2.txt")

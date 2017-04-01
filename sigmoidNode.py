@@ -7,7 +7,7 @@ class SigmoidNode:
         self.delta = 0
     def sigmoid(self, inputs):
         #implements sigmoid with try/catch for huge input
-        inputs = [1] + inputs
+        inputs = numpy.concatenate(([1], inputs))
         sigma = numpy.dot(inputs, self.theta)
         try:
             ret = 1 / (1 + numpy.exp(-sigma))
@@ -21,7 +21,7 @@ class SigmoidNode:
     def updateWeights(self, inputs):
         #updates weights in accordance with stored error
         learningRate = 1
-        inputs = [1] + inputs
+        inputs = numpy.concatenate(([1], inputs))
         for i in range(len(inputs)):
             self.theta[i] += learningRate * self.delta * inputs[i]
         
