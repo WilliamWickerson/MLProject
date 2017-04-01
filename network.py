@@ -48,6 +48,32 @@ class Network:
                 file.write(numpy.array_str(node.theta) + "\n")
         numpy.set_printoptions(threshold = 10, linewidth = 75)
         file.close()
+    def networkOutputs(self, inputs):
+        outputs = [numpy.array(inputs)]
+        for rowNum in reversed(range(0, len(self.network))):
+            layorOutputs = [neuron.sigmoid(outputs[0]) for neuron in self.network[rowNum]]
+            outputs = [layorOutputs] + outputs
+        return outputs
+    def classify(self, inputs):
+        outputs = networkOutputs(inputs)
+        maxValue, maxIndex = max(outputs[0])
+        return maxIndex
+    def backPropagate(self, inputs, targets):
+        outputs = networkOutput(inputs)
+        for rowNum in range(0, len(self.network)):
+            if rowNum == 0:
+                for neuronNum in range(0, len(self.network[rowNum])):
+                    error = targets[neuronNum] - outputs[rowNum][neuronNum]
+                    self.network[rowNum][neuronNum].updateDelta(outputs[rowNum + 1], error)
+            else:
+                for neuronNum in range(0, len(network[rowNum])):
+                    error = 0
+                    for neuron in self.network[rowNum - 1]:
+                        error += neuron.theta[neuronNum + 1] * neuron.delta
+                    self.network[rowNum][neuronNum].updateDelta(outputs[rowNum + 1], error)
+        for rowNum in range(0, len(self.network)):
+            for neuron in self.network[rowNum]:
+                neuron.updateWeights(outputs[rowNum + 1])
         
 network = Network([44,100,161])
 network.startFromScratch()
