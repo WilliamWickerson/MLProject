@@ -1,7 +1,7 @@
 import wave
 import audioop
 
-#Opens up the audio file and uses audioop to change the frame rate
+#Opens up the audio file and uses audioop to change the sample rate
 #Only works for files that are already in .wav format
 def downSample(fileName, sampleRate):
     reader = wave.open(fileName, 'r')
@@ -25,7 +25,7 @@ def downSample(fileName, sampleRate):
     writer.close()
     
 #Checks if file exists, if it does check if it has already been converted,
-#If not yet converted, convert the file to 16kH
+#If not yet converted, convert the file to 16kHz
 def downSampleTo16(fileName):
     try:
         reader = wave.open(fileName, 'r')
