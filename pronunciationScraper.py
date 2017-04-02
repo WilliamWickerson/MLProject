@@ -97,11 +97,27 @@ def addWords():
             if len(pronunciation) == 0:
                 print(line)
                 selection = input()
-                writeFile.write(line.split(" ")[0] + " " + selection + '"\n')
+                writeFile.write(line.split(" ")[0] + ' "' + selection + '"\n')
             else:
                 writeFile.write(line + "\n")
     
     writeFile.close()
+
+#This shouldn't need to be used, I just made a mistake
+def fixFormatting():
+    writer = open('new words.txt', 'w', encoding='utf-8')
+    with open("words.txt", encoding='utf-8') as wordFile:
+        lines = wordFile.readlines()
+        for line in lines:
+            line = line.strip()
+            pronunc = line.split(" ")[1]
+            if pronunc == '"':
+                x = 1
+            elif pronunc[0] != '"':
+                writer.write(line.split(" ")[0] + ' "' + line.split(" ")[1] + "\n")
+            else:
+                writer.write(line + "\n")
+writer.close()
 
 #Running this script just converts words.txt to formatted words.txt
 convertUsable()
