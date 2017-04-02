@@ -117,7 +117,7 @@ def fixFormatting():
                 writer.write(line.split(" ")[0] + ' "' + line.split(" ")[1] + "\n")
             else:
                 writer.write(line + "\n")
-writer.close()
+    writer.close()
 
 #Running this script just converts words.txt to formatted words.txt
 convertUsable()
