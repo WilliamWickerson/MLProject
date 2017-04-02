@@ -90,7 +90,8 @@ class Network:
             else:
                 for neuronNum in range(0, len(self.network[rowNum])):
                     self.network[rowNum][neuronNum].updateWeights([outputs[rowNum + 1][neuronNum]])
-        
+    
+""" Some test usage
 network = Network([44,100,161])
 network.startFromScratch()
 network.writeToFile("test.txt")
@@ -99,3 +100,4 @@ for i in range(1000):
 print(network.classify([1]*161))
 print(network.networkOutputs([1]*161)[0])
 network.writeToFile("test2.txt")
+"""

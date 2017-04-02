@@ -1,4 +1,5 @@
 global phonemeDict
+#A dictionary of the 37 phonemes we will be using
 phonemeDict = {"/b/": 0,
                "/d/": 1,
                "/f/": 2,
@@ -23,32 +24,39 @@ phonemeDict = {"/b/": 0,
                "/ē/": 21,
                "/i/": 22,
                "/ī/": 23,
-               "/o/": 24,
-               "/ō/": 25,
-               "/oo/": 26,
-               "/u/": 27,
-               "/ū/": 28,
-               "/y/": 29,
-               "/oi/": 30,
-               "/ow/": 31,
-               "/ə/": 32,
-               "/ã/": 33,
-               "/ä/": 34,
-               "/û/": 35,
-               "/ô/": 36,
-               "/ēə/": 37,
-               "/üə/": 38,
-               "/zh/": 39,
-               "/ch/": 40,
-               "/sh/": 41,
-               "/th/": 42,
-               "/ng/": 43}
+               "/ō/": 24,
+               "/o/": 25, #/or/ sound
+               "/ü/": 26,
+               "/y/": 27,
+               "/oi/": 28,
+               "/ow/": 29,
+               "/ə/": 30,
+               "/ä/": 31,
+               "/u̇/": 32, #As in hood
+               "/zh/": 33,
+               "/ch/": 34,
+               "/sh/": 35,
+               "/th/": 36,
+               "/ŋ/": 37} #/'ng/ sound
 
+#The double letters are important for words.py's getPhonemes() function
+global doubleLetters
+doubleLetters = ["oi", "ow", "zh", "ch", "sh", "th", "u̇"]
+
+#NETWORK HELPER FUNCTIONS
+#Returns the sound from a given number
 def getPhoneme(number):
     for key in phonemeDict:
         if phonemeDict[key] == number:
             return key
         
+#Returns the number for a given sound
 def getNumber(phoneme):
     return phonemeDict[phoneme]
+
+#Returns the target vector for a particular phoneme
+def getTargets(phoneme):
+    targets = [0]*37
+    targets[phonemeDict[phoneme]] = 1
+    return targets
             
