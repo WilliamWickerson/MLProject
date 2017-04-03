@@ -18,22 +18,22 @@ phonemeDict = {"/b/": 0,
                "/w/": 15,
                "/y/": 16,
                "/z/": 17,
-               "/a/": 18,
+               "/a/": 18, #hard a as in 'bat'
                "/ā/": 19,
                "/e/": 20,
                "/ē/": 21,
                "/i/": 22,
                "/ī/": 23,
                "/ō/": 24,
-               "/o/": 25, #/or/ sound
-               "/ü/": 26,
+               "/o/": 25, #/or/ sound, more closed mouth than /ä/
+               "/ü/": 26, #/oo/ sound as in boo
                "/y/": 27,
                "/oi/": 28,
                "/ow/": 29,
-               "/ə/": 30,
-               "/ä/": 31,
+               "/ə/": 30, #/uh/ sound
+               "/ä/": 31, #soft a as in 'fought'
                "/u̇/": 32, #As in hood
-               "/zh/": 33,
+               "/zh/": 33, #as in ver/zh/in (version)
                "/ch/": 34,
                "/sh/": 35,
                "/th/": 36,
