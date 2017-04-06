@@ -1,47 +1,47 @@
 global phonemeDict
 #A dictionary of the 37 phonemes we will be using
-phonemeDict = {"/b/": 0,
-               "/d/": 1,
-               "/f/": 2,
-               "/g/": 3,
-               "/h/": 4,
-               "/j/": 5,
-               "/k/": 6,
-               "/l/": 7,
-               "/m/": 8,
-               "/n/": 9,
-               "/p/": 10,
-               "/r/": 11,
-               "/s/": 12,
-               "/t/": 13,
-               "/v/": 14,
-               "/w/": 15,
-               "/y/": 16,
-               "/z/": 17,
-               "/a/": 18, #hard a as in 'bat'
-               "/ā/": 19,
-               "/e/": 20,
-               "/ē/": 21,
-               "/i/": 22,
-               "/ī/": 23,
-               "/ō/": 24,
-               "/o/": 25, #/or/ sound, more closed mouth than /ä/
-               "/ü/": 26, #/oo/ sound as in boo
-               "/y/": 27,
-               "/oi/": 28,
-               "/ow/": 29,
-               "/ə/": 30, #/uh/ sound
-               "/ä/": 31, #soft a as in 'fought'
-               "/u̇/": 32, #As in hood
-               "/zh/": 33, #as in ver/zh/in (version)
-               "/ch/": 34,
-               "/sh/": 35,
-               "/th/": 36,
-               "/ŋ/": 37} #/'ng/ sound
+phonemeDict = {"/a/": 0,
+               "/ä/": 1, #soft a as in 'fought'
+               "/ā/": 2,
+               "/b/": 3,
+               "/ch/": 4,
+               "/d/": 5,
+               "/e/": 6,
+               "/ē/": 7,
+               "/f/": 8,
+               "/g/": 9,
+               "/h/": 10,
+               "/i/": 11,
+               "/ī/": 12,
+               "/j/": 13,
+               "/k/": 14,
+               "/l/": 15,
+               "/m/": 16,
+               "/n/": 17,
+               "/ŋ/": 18, #/'ng/ sound
+               "/o/": 19, #/or/ sound, more closed mouth than /ä/
+               "/ō/": 20,
+               "/oi/": 21,
+               "/ow/": 22,
+               "/p/": 23,
+               "/r/": 24,
+               "/s/": 25,
+               "/sh/": 26,
+               "/t/": 27,
+               "/th/": 28,
+               "/u̇/": 29, #As in hood
+               "/ü/": 30, #/oo/ sound as in boo
+               "/uh/": 31,
+               "/v/": 32,
+               "/w/": 33,
+               "/y/": 34,
+               "/z/": 35,
+               "/zh/": 36, #as in ver/zh/in (version)
+               }
 
 #The double letters are important for words.py's getPhonemes() function
 global doubleLetters
-doubleLetters = ["oi", "ow", "zh", "ch", "sh", "th", "u̇"]
+doubleLetters = ["oi", "ow", "zh", "ch", "sh", "th", "u̇", "uh"]
 
 #NETWORK HELPER FUNCTIONS
 #Returns the sound from a given number
@@ -60,3 +60,6 @@ def getTargets(phoneme):
     targets[phonemeDict[phoneme]] = 1
     return targets
             
+def contains(phoneme):
+    check = "/" + phoneme + "/"
+    return check in phonemeDict

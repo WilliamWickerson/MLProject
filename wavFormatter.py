@@ -1,6 +1,8 @@
 import scipy.io.wavfile as wavfile
 from numpy.fft import rfft
 import numpy as np
+import wave
+import audioop
 
 def collectData(fileName):
     #Open up the indicated wavfile
@@ -23,3 +25,28 @@ def collectData(fileName):
     scaled = [row / np.linalg.norm(row) for row in scaled]
     
     return scaled
+
+#Opens up the audio file and uses audioop to change the sample rate
+#Only works for files that are already in .wav format
+def downSample(fileName, destination, sampleRate=16000):
+    reader = wave.open(fileName, 'r')
+    writer = wave.open(destination, 'w')
+    
+    numberFrames = reader.getnframes()
+    frameRate = reader.getframerate()
+    numberChannels = reader.getnchannels()
+    data = reader.readframes(numberFrames)
+    
+    state = None
+    converted, state = audioop.ratecv(data, 2, numberChannels, frameRate, 
+                                  sampleRate, state)
+    
+    writer.setparams((numberChannels, 2, sampleRate, 0, "NONE", "Uncompressed"))
+    writer.writeframes(converted)
+    
+    reader.close()
+    writer.close()
+
+def check16(fileName):
+    rate, data = wavfile.read(fileName)
+    return rate == 16000

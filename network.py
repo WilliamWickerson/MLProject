@@ -92,12 +92,25 @@ class Network:
                     self.network[rowNum][neuronNum].updateWeights([outputs[rowNum + 1][neuronNum]])
     
 """ Some test usage
-network = Network([44,100,161])
+network = Network([40,100,161])
+network.startFromFile("old.txt")
+outputs = network.networkOutputs([1] * 161)
+print(outputs[0])
+#print(outputs[len(outputs) - 2])
+#print(network.network[0][1].theta)
+
 network.startFromScratch()
-network.writeToFile("test.txt")
+network.writeToFile("old.txt")
+import time
+
+network.backPropagate([1]*161, [0] + [1] + [0]*38)
+
+start = time.time()
 for i in range(1000):
-    network.backPropagate([1]*161, [0] + [1] + [0]*42)
+    network.backPropagate([1]*161, [0] + [1] + [0]*38)
+print(time.time() - start)
 print(network.classify([1]*161))
 print(network.networkOutputs([1]*161)[0])
+
 network.writeToFile("test2.txt")
 """

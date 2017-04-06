@@ -77,6 +77,7 @@ def convertUsable():
             pronunciation = pronunciation.replace("ⁿ", "n")
             pronunciation = pronunciation.replace("ȯ", "o")
             pronunciation = pronunciation.replace("au̇", "ow")
+            pronunciation = pronunciation.replace("ə", "uh")
             writeFile.write(line.split(" ")[0] + ' "' + pronunciation + '"\n')
                              
     for character in characterDict:

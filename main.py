@@ -1,7 +1,9 @@
-from network import Network
+from fastNetwork import FastNetwork
+from wavFormatter import collectData
+import words
 import phonemes
 
-network = Network([38,100,161])
-network.startFromScratch()
+network = FastNetwork([37,100,161])
+network.startFromFile("training weights.txt")
 
 print(phonemes.getTargets("/th/"))
