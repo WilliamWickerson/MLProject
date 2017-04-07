@@ -31,10 +31,20 @@ def getPhonemes(phoneticWord):
 for word in phonetic:
     phonemeArray[word] = getPhonemes(phonetic[word][0])
     
+def removeDuplicates(phoneticArray):
+    ret = list()
+    ret.append(phoneticArray[0])
+    for i in range(1, len(phoneticArray)):
+        if phoneticArray[i] != phoneticArray[i-1]:
+            ret.append(phoneticArray[i])
+    return ret
+
 #Calculates the levenshtein distance between the array and every word in phonemeArray dict
 #Returns the minimum based on the levenshtein distance followed by most common
 def closestWord(phoneticArray):
     minimum = ("NULL", 10000, 10000)
+    phoneticArray = removeDuplicates(phoneticArray)
+    print(phoneticArray)
     for word in phonemeArray:
         tempArray = phonemeArray[word]
         distanceMatrix = numpy.zeros((len(phoneticArray), len(tempArray)))
@@ -57,5 +67,3 @@ def closestWord(phoneticArray):
         if (distance < minimum[1]) or (distance == minimum[1] and phonetic[word][1] < minimum[2]):
             minimum = (word, distance, phonetic[word][1])
     return minimum
-            
-print(closestWord(["/s/", "/ī/", "/t/"]))
