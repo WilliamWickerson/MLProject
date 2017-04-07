@@ -43,7 +43,6 @@ def trainEpoch(network, inputs, targets):
     combined = list(zip(inputs, targets))
     random.shuffle(combined)
     for inputData, targetData in combined:
-        print(targetData)
         network.backPropagate(inputData, targetData)
     
 formatData("unformatted data", "formatted data")
