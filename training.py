@@ -48,10 +48,10 @@ def trainEpoch(network, inputs, targets):
 formatData("unformatted data", "formatted data")
 inputs, targets = collectData("formatted data")
 
-network = FastNetwork([37, 100, 161])
+network = FastNetwork([37, 80, 120, 161], learningRate=.001)
 
 start = time.time()
-for i in range(100):
+for i in range(20):
     if i % 5 == 0:
         print(i)
     trainEpoch(network, inputs, targets)

@@ -3,7 +3,7 @@ import wavFormatter
 import words
 import phonemes
 
-network = FastNetwork([37,100,161])
+network = FastNetwork([37,80,120,161], softmax=True)
 network.startFromFile("trained weights.txt")
 
 fileName = input("Type in the word's .wav file: ")

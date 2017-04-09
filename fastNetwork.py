@@ -112,10 +112,12 @@ class FastNetwork:
             if i == 0:
                 #For some reason softmax flips this
                 if self.softmax:
-                    error = outputs[i] - targets
+                    error = targets - outputs[i]
+                    #error = numpy.ones(targets.shape)
+                    delta = error
                 else:
                     error = targets - outputs[i]
-                delta = error * outputs[i] * (numpy.ones((self.weights[i].shape[0])) - outputs[i])
+                    delta = error * outputs[i] * (numpy.ones((self.weights[i].shape[0])) - outputs[i])
                 deltas.append(delta)
                 change = numpy.outer((self.learningRate * deltas[i]), numpy.array(numpy.concatenate((outputs[i+1], [1]))))
                 changes.append(change)
