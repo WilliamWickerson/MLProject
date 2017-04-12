@@ -4,11 +4,13 @@ from numpy.fft import rfft
 import numpy as np
 import pylab
 
-from downSample import downSample
+from wavFormatter import downSample
 
 #Put your own .wav's here
-rate, data = wavfile.read("speaking_test.wav")
+rate, data = wavfile.read("testing1.wav")
 #rate, data = wavfile.read("11-true_love_waits.wav")
+
+plt.plot(data)
 
 #Get number of samples per 20ms, since rate is samples per 1s
 sampleSize = rate // 50
@@ -24,6 +26,7 @@ sampleData = [np.absolute(data) for data in complexSampleData]
 #.0001 prevents taking log(0) and crashing my computer again
 scaled = [20 * np.log10(data+.0001) for data in sampleData]
 
+'''
 #Print graphs of the 100-110th samples
 for i in range(100, 110):
     #Due to Nyquist, we know buckets are evenly spread from 0 to rate/2
@@ -31,8 +34,12 @@ for i in range(100, 110):
     bucketSize = rate // sampleSize
     plt.plot(range(0, rate // 2 + 1, bucketSize), scaled[i])
     plt.show()
+'''
+
+
 
 #Shows a spectrogram of the first 1000 samples
-xx, yy = pylab.meshgrid(np.arange(len(scaled[0])), np.arange(1000))
+xx, yy = pylab.meshgrid(np.arange(len(scaled[0])), np.arange())
 plt.pcolor(xx, yy, scaled[0:1000])
+plt.colorbar()
 plt.show()

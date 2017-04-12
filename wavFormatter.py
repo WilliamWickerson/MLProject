@@ -50,3 +50,15 @@ def downSample(fileName, destination, sampleRate=16000):
 def check16(fileName):
     rate, data = wavfile.read(fileName)
     return rate == 16000
+
+#Combines all channels into one channel, including the case where the data is already in one channel
+def combineChannels(data):
+    try:
+        len(data[0])
+    except Exception:
+        return data
+    
+    ret = np.zeros(len(data))
+    for i in range(len(ret)):
+        ret[i] = sum(data[i, j] for j in range(len(data[0])))
+    return ret
