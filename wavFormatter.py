@@ -26,6 +26,20 @@ def collectData(fileName):
     
     return scaled
 
+def extractFirstPhenomeToWavFile(filename, firstPhenome): #Assumption: Data is down-sampled to 16kHz
+
+    rate, data = wavfile.read(filename)
+    
+    data = combineChannels(data)
+    
+    for i in range(0, len(data), 100):
+        if data[i] > 150: #Fine tuned parameter. This only works for 'clean' data (or read data) to ignore silences
+            print(i)
+            newFileName = filename[:-4] + firstPhenome + '.wav'
+            dataToWrite = np.asarray(data[i:i + rate*0.3], dtype=np.int16) #0.3 seconds for first phenome
+            wavfile.write(newFileName, rate, dataToWrite)  
+            break
+                 
 #Opens up the audio file and uses audioop to change the sample rate
 #Only works for files that are already in .wav format
 def downSample(fileName, destination, sampleRate=16000):
@@ -62,3 +76,14 @@ def combineChannels(data):
     for i in range(len(ret)):
         ret[i] = sum(data[i, j] for j in range(len(data[0])))
     return ret
+
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
