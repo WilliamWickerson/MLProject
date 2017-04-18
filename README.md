@@ -26,7 +26,7 @@ To import soundfile:
 import soundfile as sf
 ```
 
-The converter can be run in Python command-line in flacToWaveConverter. The converter will prompt you to input a file directory. The converter will then crawl the entire file directory, converting every possible .flac file to a .wav file.
+The converter can be run in Python command-line by running flacToWaveConverter.py. The converter will prompt you to input a file directory. The converter will then crawl the entire file directory, converting every possible .flac file to a .wav file.
 
 ## Extracting LibreSpeech files
 
