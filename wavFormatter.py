@@ -3,6 +3,7 @@ from numpy.fft import rfft
 import numpy as np
 import wave
 import audioop
+import re
 
 def collectData(fileName):
     #Open up the indicated wavfile
@@ -25,7 +26,7 @@ def collectData(fileName):
     scaled = [row / np.linalg.norm(row) for row in scaled]
     
     return scaled
-
+                 
 #Opens up the audio file and uses audioop to change the sample rate
 #Only works for files that are already in .wav format
 def downSample(fileName, destination, sampleRate=16000):
@@ -50,3 +51,54 @@ def downSample(fileName, destination, sampleRate=16000):
 def check16(fileName):
     rate, data = wavfile.read(fileName)
     return rate == 16000
+
+#Combines all channels into one channel, including the case where the data is already in one channel
+def combineChannels(data):
+    try:
+        len(data[0])
+    except Exception:
+        return data
+    
+    ret = np.zeros(len(data))
+    for i in range(len(ret)):
+        ret[i] = sum(data[i, j] for j in range(len(data[0])))
+    return ret
+
+def extractFirstPhonemeToWavFile(filename, firstPhenome): #Assumption: Data is down-sampled to 16kHz
+
+    rate, data = wavfile.read(filename)
+    
+    data = combineChannels(data)
+    
+    for i in range(0, len(data), 100):
+        if data[i] > 150: #Fine tuned parameter. This only works for 'clean' data (or read data) to ignore silences
+            newFileName = filename[:-4] + firstPhenome + '.wav'
+            dataToWrite = data[i:i + rate*0.3] #0.3 seconds for first phenome
+            wavfile.write(newFileName, rate, dataToWrite)  
+            break
+        
+def extractFirstPhonemeToDirectory(filepath, saveLocation, firstPhenome): #Assumption: Data is down-sampled to 16kHz
+
+    rate, data = wavfile.read(filepath)
+    
+    data = combineChannels(data)
+    
+    for i in range(0, len(data), 100):
+        if data[i] > 300: #Fine tuned parameter. This only works for 'clean' data (or read data) to ignore silences
+            groups = re.search('\\\\(.+\\\\)*(.+)\\.(.+)$', filepath) #need to use \\\\ in order to write \\ in regex (matching \s)
+            filename = groups.group(2) #location of the filename
+            newFileName = saveLocation + firstPhenome + "-" + filename + '.wav'
+            dataToWrite = data[i:i + rate*0.3] #0.3 seconds for first phenome. Need not be incredibly accurate
+            #dataToWrite = np.asarray(data[i:i + rate*0.3], dtype=np.int16) 
+            wavfile.write(newFileName, rate, dataToWrite)  
+            break
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
