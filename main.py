@@ -18,9 +18,6 @@ inputs = featureExtraction.extractFeatures(fileName)
 outputs = network.networkOutputs(inputs[0])[0]
 for i in range(0, len(outputs)):
     print(phonemes.getPhoneme(i), outputs[i])
-    
-print(network.networkOutputs(inputs[3]))
-print(inputs[3])
 
 phonemes = [phonemes.getPhoneme(network.classify(inp)[0]) for inp in inputs]
 

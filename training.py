@@ -66,12 +66,12 @@ def trainEpoch(network, inputs, targets):
 formatData("unformatted data", "formatted data")
 inputs, targets = collectDataNew("formatted data")
 
-network = FastNetwork([37, 37, 38, 38, 39, 39, 40, 40], learningRate=.1, softmax=True)
+network = FastNetwork([37, 100, 200, 40], learningRate=.01, softmax=True)
 
 start = time.time()
-for i in range(100):
+for i in range(50):
     print(i)
     trainEpoch(network, inputs, targets)
 print(time.time() - start)
 
-network.writeToFile("trained weights2.txt")
+network.writeToFile("trained weights.txt")
