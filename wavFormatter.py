@@ -52,7 +52,7 @@ def downSample(fileName, destination, sampleRate=16000):
 
 def checkRate(fileName, to_check=16000):
     rate, data = wavfile.read(fileName)
-    return rate == 16000
+    return rate == to_check
 
 #Combines all channels into one channel, including the case where the data is already in one channel
 def combineChannels(data):    

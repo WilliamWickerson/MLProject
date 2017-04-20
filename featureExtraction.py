@@ -8,22 +8,22 @@ import numpy
 
 def extractFeatures(fileName):
     rate, data = wavfile.read(fileName)
-    
+    #Combine the audio into a single channel
     data = wavFormatter.combineChannels(data)
-    
+    #Emphasize high frequency noise
     data = preemphasis(data)
-    
+    #Split the data into 20ms samples with 10ms overlap
     sample_size = rate // 50
     samples = getSamples(data, sample_size)
-    
+    #Take a Hamming Window on all of the frames
     samples *= numpy.hamming(sample_size)
-    
+    #Get the RFFT magnitudes of the data, and calculate the power
     abs_samples = numpy.absolute(numpy.fft.rfft(samples, 512))
     pow_samples = (1 / 512) * (abs_samples ** 2)
-    
+    #Convert the power samples to Mels scale in decibels
     filter_banks = convertMels(pow_samples, rate)
-    
-    return filter_banks
+    #Scale the data to be better usable by the network
+    return filter_banks / 100
 
 def preemphasis(data, alpha=.97):
     return numpy.append(data[0], data[1:] - alpha * data[:-1])
