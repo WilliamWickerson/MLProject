@@ -1,8 +1,9 @@
 import os
 import numpy as np
 import scipy.io.wavfile as wavfile
+import sys
+sys.path.insert(0, '../') # allows us to import files from the root directory
 import phonemes
-import time
 
 def main():
     
