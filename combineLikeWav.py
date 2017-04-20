@@ -19,16 +19,30 @@ def combinePhenomesIntoOneWavFile(topDirectory, extractDirectory):
     
     #from the top directory of data, walk the directory 
     for root, dirs, files in os.walk(topDirectory): 
-        for phoneme in phonemeDict:
+        for phoneme in phonemes.phonemeDict:
             phon = phoneme[1:-1] #Strips /'s from phoneme
-            summedData = {}
+            
+            print("Current phoneme: " + phon)
+            
+            summedData = np.ndarray()
+            maxRate = 0
+            numberOfRates = 0
             for file in files:
                 if file[-4:] == ".wav" and file[:1 + len(phon)] == phon + "-":
                     data, rate = wavfile.read(root + "\\" + file)
-                    print(type(data))
-                    return
-
-        
+                    summedData = np.append(summedData, data)
+                    
+                    if maxRate < rate:
+                        maxRate = rate
+                        numberOfRates = numberOfRates + 1
+                    
+                    if numberOfRates > 1:
+                        raise ValueError('Too many rates given')
+            
+            newFileName = extractDirectory + "\\" + phon + ".wav"
+            wavfile.write(newFileName, maxRate, summedData)
+            
+            print("Written to: " + newFileName)   
                         
 if __name__ == "__main__":
     main()
