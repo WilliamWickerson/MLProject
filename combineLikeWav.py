@@ -13,7 +13,6 @@ def main():
         combinePhenomesIntoOneWavFile(topDirectory, extractDirectory)
     else:
         print("Not a valid file directory")
-        exit()
         
 def combinePhenomesIntoOneWavFile(topDirectory, extractDirectory):
     
@@ -24,13 +23,19 @@ def combinePhenomesIntoOneWavFile(topDirectory, extractDirectory):
             
             print("Current phoneme: " + phon)
             
-            summedData = np.ndarray()
+            summedData = np.array([], dtype=np.int16)
             maxRate = 0
             numberOfRates = 0
+            count = 0
+            
             for file in files:
-                if file[-4:] == ".wav" and file[:1 + len(phon)] == phon + "-":
-                    data, rate = wavfile.read(root + "\\" + file)
-                    summedData = np.append(summedData, data)
+                count = count + 1
+                
+                checkString = phon + "-"
+                if file[-4:] == ".wav" and file[:1 + len(phon)] == checkString:
+                    print("Added: " + str(count) + " " + file)
+                    rate, data = wavfile.read(root + "\\" + file)
+                    summedData = np.append(summedData, data) #can optimize this by using 'merging' from merge sort
                     
                     if maxRate < rate:
                         maxRate = rate

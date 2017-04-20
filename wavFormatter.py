@@ -72,7 +72,7 @@ def extractFirstPhonemeToWavFile(filename, firstPhenome): #Assumption: Data is d
     for i in range(0, len(data), 100):
         if data[i] > 150: #Fine tuned parameter. This only works for 'clean' data (or read data) to ignore silences
             newFileName = filename[:-4] + firstPhenome + '.wav'
-            dataToWrite = data[i:i + rate*0.3] #0.3 seconds for first phenome
+            dataToWrite = data[i:i + rate*0.2] #0.3 seconds for first phenome
             wavfile.write(newFileName, rate, dataToWrite)  
             break
         
@@ -80,14 +80,18 @@ def extractFirstPhonemeToDirectory(filepath, saveLocation, firstPhenome): #Assum
 
     rate, data = wavfile.read(filepath)
     
+    if(rate > 16000):
+        print("Rate not compatible")
+        return
+    
     data = combineChannels(data)
     
     for i in range(0, len(data), 100):
-        if data[i] > 300: #Fine tuned parameter. This only works for 'clean' data (or read data) to ignore silences
+        if data[i] > 400: #Fine tuned parameter. This only works for 'clean' data (or read data) to ignore silences
             groups = re.search('\\\\(.+\\\\)*(.+)\\.(.+)$', filepath) #need to use \\\\ in order to write \\ in regex (matching \s)
             filename = groups.group(2) #location of the filename
             newFileName = saveLocation + firstPhenome + "-" + filename + '.wav'
-            dataToWrite = data[i:i + rate*0.3] #0.3 seconds for first phenome. Need not be incredibly accurate
+            dataToWrite = data[i:i + rate*0.2] #0.3 seconds for first phenome. Need not be incredibly accurate
             #dataToWrite = np.asarray(data[i:i + rate*0.3], dtype=np.int16) 
             wavfile.write(newFileName, rate, dataToWrite)  
             break
