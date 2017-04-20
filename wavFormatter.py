@@ -51,19 +51,13 @@ def downSample(fileName, destination, sampleRate=16000):
     reader.close()
     writer.close()
 
-def check16(fileName):
+def checkRate(fileName, to_check=16000):
     rate, data = wavfile.read(fileName)
     return rate == 16000
 
 #Combines all channels into one channel, including the case where the data is already in one channel
-def combineChannels(data):
-    try:
-        len(data[0])
-    except Exception:
-        return data
-    
-    arr = np.sum(data, axis=1) / 2
-    return np.asarray(arr, dtype=np.int16)
+def combineChannels(data):    
+    return np.sum(data, axis=1) / 2
 
 def extractFirstPhonemeToWavFile(filename, firstPhenome): #Assumption: Data is down-sampled to 16kHz
 
