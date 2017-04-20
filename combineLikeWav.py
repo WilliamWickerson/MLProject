@@ -43,11 +43,15 @@ def combinePhenomesIntoOneWavFile(topDirectory, extractDirectory):
                     
                     if numberOfRates > 1:
                         raise ValueError('Too many rates given')
+                        
+            if maxRate != 0:
+                newFileName = extractDirectory + "\\" + phon + ".wav"
+                wavfile.write(newFileName, maxRate, summedData)
+                print("Written to: " + newFileName)
+            else:
+                print("Not written: " + newFileName)
             
-            newFileName = extractDirectory + "\\" + phon + ".wav"
-            wavfile.write(newFileName, maxRate, summedData)
-            
-            print("Written to: " + newFileName)   
+           
                         
 if __name__ == "__main__":
     main()

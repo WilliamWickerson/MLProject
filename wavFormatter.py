@@ -9,11 +9,13 @@ def collectData(fileName):
     #Open up the indicated wavfile
     rate, data = wavfile.read(fileName)
     
+    data = combineChannels(data)
+    
     #Get number of samples per 20ms, since rate is samples per 1s
     sampleSize = rate // 50
     
     #Split data into 20ms segments
-    samples = [data[i*sampleSize:(i+1)*sampleSize, 0] for i in range(0, len(data) // sampleSize)]
+    samples = [data[i*sampleSize:(i+1)*sampleSize] for i in range(0, len(data) // sampleSize)]
     #Take the real fourier transform on each sample,
     #returns [sampleSize/2 + 1] (see Nyquist) evenly distributed buckets for each
     complexSampleData = [rfft(sample) for sample in samples]
