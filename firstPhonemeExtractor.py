@@ -1,6 +1,9 @@
 import os
 import wavFormatter
 import words
+import scipy.io.wavfile as wavfile
+import numpy as np
+import re
 
 def formatData(unformatted, formatted):
     #get all of the files in the folder's subdirectories
@@ -74,6 +77,40 @@ def extractFirstPhonemesFromLibre(topDirectory, extractDirectory):
         target.write(word)
         target.write("\n")
     target.close()
-                        
+
+#Combines all channels into one channel, including the case where the data is already in one channel
+def combineChannels(data):    
+    return np.sum(data, axis=1) / 2
+
+def extractFirstPhonemeToWavFile(filename, firstPhenome): #Assumption: Data is down-sampled to 16kHz
+
+    rate, data = wavfile.read(filename)
+    
+    data = combineChannels(data)
+    
+    for i in range(0, len(data), 100):
+        if data[i] > 150: #Fine tuned parameter. This only works for 'clean' data (or read data) to ignore silences
+            newFileName = filename[:-4] + firstPhenome + '.wav'
+            dataToWrite = data[i:i + rate*0.3] #0.3 seconds for first phenome
+            wavfile.write(newFileName, rate, dataToWrite)  
+            break
+        
+def extractFirstPhonemeToDirectory(filepath, saveLocation, firstPhenome): #Assumption: Data is down-sampled to 16kHz
+
+    rate, data = wavfile.read(filepath)
+    
+    data = combineChannels(data)
+    
+    for i in range(0, len(data), 100):
+        if data[i] > 300: #Fine tuned parameter. This only works for 'clean' data (or read data) to ignore silences
+            groups = re.search('\\\\(.+\\\\)*(.+)\\.(.+)$', filepath) #need to use \\\\ in order to write \\ in regex (matching \s)
+            filename = groups.group(2) #location of the filename
+            newFileName = saveLocation + firstPhenome + "-" + filename + '.wav'
+            dataToWrite = data[i:i + rate*0.3] #0.3 seconds for first phenome. Need not be incredibly accurate
+            #dataToWrite = np.asarray(data[i:i + rate*0.3], dtype=np.int16) 
+            wavfile.write(newFileName, rate, dataToWrite)  
+            break
+
+    
 
 
