@@ -68,7 +68,7 @@ inputs, targets = collectDataNew("formatted data")
 
 network = FastNetwork([37, 37, 38, 38, 39, 39, 40, 40], learningRate=.1, softmax=True)
 
-start = time.time()
+start = time.time() 
 for i in range(100):
     print(i)
     trainEpoch(network, inputs, targets)
