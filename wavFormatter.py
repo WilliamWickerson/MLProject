@@ -23,7 +23,8 @@ def collectData(fileName):
     #.0001 prevents taking log(0) and crashing my computer again
     scaled = [20 * np.log10(data+.0001) for data in sampleData]
     #Scale the data to a unit vector to prevent interference due to softer/louder samples
-    scaled = [row / np.linalg.norm(row) for row in scaled]
+    #scaled = [row / np.linalg.norm(row) for row in scaled]
+    scaled = [row / 100 for row in scaled]
     
     return scaled
                  
@@ -59,10 +60,8 @@ def combineChannels(data):
     except Exception:
         return data
     
-    ret = np.zeros(len(data))
-    for i in range(len(ret)):
-        ret[i] = sum(data[i, j] for j in range(len(data[0])))
-    return ret
+    arr = np.sum(data, axis=1) / 2
+    return np.asarray(arr, dtype=np.int16)
 
 def extractFirstPhonemeToWavFile(filename, firstPhenome): #Assumption: Data is down-sampled to 16kHz
 
