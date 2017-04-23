@@ -47,22 +47,22 @@ def closestWord(phoneticArray):
     print(phoneticArray)
     for word in phonemeArray:
         tempArray = phonemeArray[word]
-        distanceMatrix = numpy.zeros((len(phoneticArray), len(tempArray)))
+        distanceMatrix = numpy.zeros((len(phoneticArray) + 1, len(tempArray) + 1))
         #Calculate the levenshtein distance between arrays
-        for i in range(len(phoneticArray)):
+        for i in range(len(phoneticArray) + 1):
             distanceMatrix[i, 0] = i
-        for j in range(len(tempArray)):
+        for j in range(len(tempArray) + 1):
             distanceMatrix[0, j] = j
-        for j in range(0, len(tempArray)):
-            for i in range(0, len(phoneticArray)):
-                if tempArray[j] == phoneticArray[i]:
+        for j in range(1, len(tempArray) + 1):
+            for i in range(1, len(phoneticArray) + 1):
+                if tempArray[j - 1] == phoneticArray[i - 1]:
                     substitutionCost = 0
                 else:
                     substitutionCost = 1
                 distanceMatrix[i, j] = min([distanceMatrix[i-1, j] + 1,
                                             distanceMatrix[i, j-1] + 1,
                                             distanceMatrix[i-1, j-1] + substitutionCost])
-        distance = distanceMatrix[len(phoneticArray) - 1, len(tempArray) - 1]
+        distance = distanceMatrix[len(phoneticArray), len(tempArray)]
         #If the distance is lower or a similar distance is found on a more common word, replace minimum
         if (distance < minimum[1]) or (distance == minimum[1] and phonetic[word][1] < minimum[2]):
             minimum = (word, distance, phonetic[word][1])

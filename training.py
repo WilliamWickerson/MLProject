@@ -53,6 +53,13 @@ def collectDataNew(formatted):
     
     return inputs, targets
 
+def checkPercent(network, inputs, targets):
+    number_right = 0
+    for input, target in shuffleTogether(inputs, targets):
+        if target[network.classify(input)[0]]:
+            number_right += 1
+    return number_right / len(inputs)
+
 def shuffleTogether(list1, list2):
     assert len(list1) == len(list2)
     indices = list(range(len(list1)))
@@ -67,9 +74,12 @@ formatData("unformatted data", "formatted data")
 inputs, targets = collectDataNew("formatted data")
 
 network = FastNetwork([37, 100, 200, 40], learningRate=.01, softmax=True)
+network.startFromFile("trained weights.txt")
+
+print(checkPercent(network, inputs, targets))
 
 start = time.time()
-for i in range(50):
+for i in range(100):
     print(i)
     trainEpoch(network, inputs, targets)
 print(time.time() - start)

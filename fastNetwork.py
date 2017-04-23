@@ -110,13 +110,12 @@ class FastNetwork:
         for i in range(len(self.weights)):
             #Output layer error and change
             if i == 0:
-                #For some reason softmax flips this
                 if self.softmax:
                     error = targets - outputs[i]
-                    #error = numpy.ones(targets.shape)
                     delta = error
                 else:
                     error = targets - outputs[i]
+                    #delta = error * outputs * (1 - outputs)
                     delta = error * outputs[i] * (numpy.ones((self.weights[i].shape[0])) - outputs[i])
                 deltas.append(delta)
                 change = numpy.outer((self.learningRate * deltas[i]), numpy.array(numpy.concatenate((outputs[i+1], [1]))))
